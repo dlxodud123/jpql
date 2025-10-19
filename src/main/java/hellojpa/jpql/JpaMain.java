@@ -19,14 +19,17 @@ public class JpaMain {
 		try{
 			Member member = new Member();
 			member.setUsername("member1");
-			member.setAge(20);
-
+			member.setAge(10);
 			em.persist(member);
-			Member result = em.createQuery("select m from Member m where m.username = :username", Member.class)
-					.setParameter("username", "member1")
-					.getSingleResult();
 
-			System.out.println("singleResult : " + result.getUsername());
+			em.flush();
+			em.clear();
+
+			List<MemberDTO> result = em.createQuery("select new hellojpa.jpql.MemberDTO(m.username, m.age) from Member m", MemberDTO.class)
+					.getResultList();
+
+			System.out.println("membeDTO = " + result.get(0).getUsername());
+			System.out.println("membeDTO = " + result.get(0).getAge());
 
 			tx.commit();
 		} catch (Exception e) {
