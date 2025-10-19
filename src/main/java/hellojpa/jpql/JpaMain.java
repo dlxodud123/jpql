@@ -22,23 +22,22 @@ public class JpaMain {
 			em.persist(team);
 
 			Member member = new Member();
-			member.setUsername("teamA");
-			member.setAge(10);
+			member.setUsername("관리자");
+			member.setAge(60);
 			member.changeTeam(team);
 			em.persist(member);
 
 			em.flush();
 			em.clear();
 
-			String query = "select m.username, 'HELLO', TRUE from Member m";
-			List<Object[]> result = em.createQuery(query)
-					.getResultList();
+			String query = "select nullif(m.username, '관리자') from Member m";
+			List<String> result = em.createQuery(query, String.class)
+							.getResultList();
 
-			for (Object[] objects : result){
-				System.out.println("objects = " + objects[0]);
-				System.out.println("objects = " + objects[1]);
-				System.out.println("objects = " + objects[2]);
+			for (String s : result){
+				System.out.println("S = " + s);
 			}
+
 
 			tx.commit();
 		} catch (Exception e) {
