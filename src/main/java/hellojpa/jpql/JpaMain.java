@@ -2,9 +2,6 @@ package hellojpa.jpql;
 
 import jakarta.persistence.*;
 
-import java.util.Collection;
-import java.util.List;
-
 public class JpaMain {
 	public static void main(String[] args) {
 
@@ -44,13 +41,10 @@ public class JpaMain {
 			em.flush();
 			em.clear();
 
-			List<Member> resultList = em.createNamedQuery("Member.findByUsername", Member.class)
-					.setParameter("username", "회원1")
-					.getResultList();
+			int resultCount = em.createQuery("update Member m set m.age = 20")
+					.executeUpdate();
 
-			for (Member member : resultList){
-				System.out.println("member = " + member);
-			}
+			System.out.println("resultCount = " + resultCount);
 
 			tx.commit();
 		} catch (Exception e) {
@@ -58,7 +52,6 @@ public class JpaMain {
 		} finally {
 			em.close();
 		}
-
 		emf.close();
 	}
 }
